@@ -6,7 +6,6 @@ const Cards = () => {
   const [misConciertos, setMisConciertos] = useState([]);
 
   const handleClick = (concierto) => {
-    // Evitar duplicados
     if (!misConciertos.some(c => c.nombre === concierto.nombre)) {
       setMisConciertos((prev) => [...prev, concierto]);
     }
