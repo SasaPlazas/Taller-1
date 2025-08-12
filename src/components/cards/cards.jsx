@@ -1,37 +1,50 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './cards.css';
 import ConciertosData from '/data';
 
 const Cards = () => {
-    const [conciertos, setConciertos] = useState([]);   
+  const [misConciertos, setMisConciertos] = useState([]);
 
-     const handleClick = () => {
-        setConciertos((prevConciertos) => [
-            ...prevConciertos,
-            { 
-                id: prevConciertos.length + 1, 
-                nombre: `Concierto ${prevConciertos.length + 1}`,
-                fecha: "Fecha por definir"
-            },
-        ]);
-    };
+  const handleClick = (concierto) => {
+    // Evitar duplicados
+    if (!misConciertos.some(c => c.nombre === concierto.nombre)) {
+      setMisConciertos((prev) => [...prev, concierto]);
+    }
+  };
 
   return (
     <div>
-          <h2>Conciertos</h2>
-              <div className='cards-container'>
-                  {ConciertosData.map((concierto) => (
-                      <div className='card'> 
-                          <h1>{concierto.nombre}</h1>
-                          <h3>{concierto.fecha}</h3>
-                           <button className='añadir' onClick={handleClick}>Añadir Concierto {conciertos.length}</button>
-                      </div>
-                  ))}
-              
-              </div>
-    </div>
-  )
-}
+      <h2>Conciertos Disponibles</h2>
+      <div className='cards-container'>
+        {ConciertosData.map((concierto, index) => (
+          <div className='card' key={index}> 
+            <h1>{concierto.nombre}</h1>
+            <h3>{concierto.fecha}</h3>
+            <button 
+              className='añadir' 
+              onClick={() => handleClick(concierto)}
+            >
+              Añadir a Mis Conciertos
+            </button>
+          </div>
+        ))}
+      </div>
 
-export default Cards
+      {misConciertos.length > 0 && (
+        <>
+          <h2>Mis Conciertos</h2>
+          <div className='cards-container'>
+            {misConciertos.map((concierto, index) => (
+              <div className='card' key={index}>
+                <h1>{concierto.nombre}</h1>
+                <h3>{concierto.fecha}</h3>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default Cards;
